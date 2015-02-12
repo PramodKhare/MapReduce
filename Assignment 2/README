@@ -13,8 +13,24 @@ Assignment Details:
 	2) Performance comparisons (of running MR job on AWS EMR and in standalone mode) are put in a separate file 'performance-report.pdf'.
 	3) In order to compile and build jars for programs, we have used ANT utility, there are build.xml files for each program-version separately, in their own directories.
 	
-How to execute/run programs: 
-	
+Introduction:
+    This Map Reduce Job implementation uses Binning technique along with sampling of inputs to find out the approximate median of given input data-set points. It is similar to "Median from Frequency Tables" approach, i.e., in a frequency table, the observations are already arranged in an ascending order. We can obtain the median by looking for the value in the middle position. 
+    
+    Whereas in our problem, we have to implement the mapper which basically sorts the input values into their appropriate bins/buckets, then sort those buckets using secondary sort and then find the middle value of this total data-set i.e., median. 
+
+    One important thing to notice here is "Bins" don't store the actual values but they store the counts of values in them (in that bin). That way a lot of computations and sorting and finding is avoided. At
+    
+    Reducer, we get the list of bin counts sorted by bin-numbers and we then calculate the total number of records in all bins (by adding up their individual counts) and find middle element index. 
+    
+    In order to find the actual median value - we start from first bin - add up their counts till we reach a bin(s) which contain the median value. At this point the median value is bin-value (i.e. bin-size * bin-number).
+
+How does it work:
+    Mapper takes the input - decides whether to process/sample it based on sampling rate, then emits the key-value pair which is "Catetgory-BinNumber" and "BinNumber-BinCount" both as composite key- value class objects. We have written a grouping comparator which groups the records at reducer/combiner based on Category value only. We have implemented the partitioner class which partitions the output records at map-task, based on Category value only, so that all the records(key- value pairs) from same category should go to single Reducer. We have also implemented Combiner which helps in reducing / compressing the list of key-values sent to Reducer, increasing the performance. Combiner basically combines (adds up) the counts from same category and same BinNumber. At Reducer, we get the list of bin counts sorted by bin-numbers and we then calculate the total number of records in all bins 
+
+Improvements:
+    As the bin-size increases the approximation error (in finding the accurate median value) also increases, so rather than taking the start-value of bin-range as the median answer, we can take the middle value of bin-range. 
+    
+How to execute/run programs: 	
 	1) There are five separate directories, one for each version of program: 
 			a. MedianPurchaseV1 - improved version from Assignment 1, 
 			b. MedianPurchaseV2 - improved version from Assignment 1, 
