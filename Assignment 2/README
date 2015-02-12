@@ -1,0 +1,63 @@
+README
+
+Assignment A2: Find Approximate using binning and sampling technique
+
+Requirement: Before running any scripts please verify if you have following runtime env's/libs installed.
+	1) Java: v1.6+ preferable 
+	2) Ant: for building projects and creating executable jars
+	3) Hadoop 
+	4) input file for map-reduce program (either locally or in HDFS)
+	
+Assignment Details:
+	1) As per problem statement, the approximate median calculation using map-reduce with technique of binning and sampling.
+	2) Performance comparisons (of running MR job on AWS EMR and in standalone mode) are put in a separate file 'performance-report.pdf'.
+	3) In order to compile and build jars for programs, we have used ANT utility, there are build.xml files for each program-version separately, in their own directories.
+	
+How to execute/run programs: 
+	
+	1) There are five separate directories, one for each version of program: 
+			a. MedianPurchaseV1 - improved version from Assignment 1, 
+			b. MedianPurchaseV2 - improved version from Assignment 1, 
+			c. MedianPurchaseV3 - improved version from Assignment 1, 
+			c. MedianPurchaseV4Old- improved version from Assignment 1, 
+			d. MedianPurchaseV2New- =====> new implementation using BINs and Sample Rate
+	
+	2) Each Directory contains - 
+		a) source directory (src), 
+		b) lib directory which contains compile-time libraries, 
+		c) build.xml (for building project/program with ANT script), 
+		d) generate-jar.sh (just compiles and builds the jar for program with proper MANIFEST file mentioning main-class name), 
+		e) run-program-only.sh (runs the program from already existing jar with given inputs) and 
+		f) run-all.sh (Does both compile code, generates jar and runs the program with given inputs).
+		
+	3) Examples - how to execute above scripts.
+		a) generate-jar.sh (NOTE: you might need to add execute permission to make this script executable)
+		>> ./generate-jar.sh
+
+		b) run-program.sh
+		(NOTE: you might need to add execute permission to make this script executable)
+		(NOTE: While running programs V2, V3, V4-old, V4-New on hadoop, make sure your files are put in HDFS.)
+		>> ./run-program.sh input/purchases4.txt output
+
+		c) run.sh 
+		(NOTE: you might need to add execute permission to make this script executable)
+		(NOTE: While running programs V2, V3, V4-old, V4-New on hadoop, make sure your files are put in HDFS.)
+		>> ./run.sh input/purchases4.txt output 
+
+		d) If you want to run the generated jar all by yourself using hadoop command, you can do that using 
+		>> hadoop jar MedianPurchaseV2.jar input/purchases4.txt output
+		
+		or 
+		
+		>> java -jar MedianPurchaseV1.jar ../purchases4.txt output.txt
+		Or with JVM parameters like
+		>> java -Xms1400m -Xmx2000m -XX:ParallelGCThreads=4 -jar MedianPurchaseV1.jar ../purchases4.txt output.txt
+
+		4) How to run new version 4 - using command line arguments:
+		>> hadoop jar MedianPurchaseV4New.jar <input_path> <output_path> <bin_size> <sample_rate>
+		>> hadoop jar MedianPurchaseV4New.jar input/purchases4.txt output 1 100
+		
+Important Note:
+1) For V1 program, input file should be on local and not on HDFS (like for v2, v3, v4-old, V4-New).
+2) For V2, V3, V4-old, V4-New - input file should be in HDFS (except when running in standalone mode).
+3) Make sure hadoop is properly installed and configured before you run any of above programs.
