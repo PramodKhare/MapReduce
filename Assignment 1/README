@@ -1,0 +1,57 @@
+README
+
+Course: Parallel Data Processing in Map Reduce (CS6240)
+Assignment A1: Median Redux
+Author: Pramod Khare
+NEU ID: 001910794
+Email ID: kharepr@ccs.neu.edu, khare.pr@husky.neu.edu	
+
+Requirement: Before running any scripts please verify if you have following runtime env's/libs installed.
+	1) Java: v1.6+ preferable 
+	2) Ant: for building projects and creating executable jars
+	3) Hadoop 
+	4) input file for map-reduce program (either locally or in HDFS)
+	
+Assignment Details:
+	1) As per problem statement, there are multiple versions of Median-Redux program (V1 to V4), their performance comparisons are put in a separate file 'performance-report.pdf'.
+	2) In order to compile and build jars for programs, I have used ANT utility, there are build.xml files for each program-version separately, in their own directories.
+	
+How to execute/run programs: 
+	
+	1) There are four separate directories, one for each version of program (i.e. MedianPurchaseV1, MedianPurchaseV2, etc.).
+	
+	2) Each Directory contains - 
+		a) source directory (src), 
+		b) lib directory which contains compile-time libraries, 
+		c) build.xml (for building project/program with ANT script), 
+		d) generate-jar.sh (just compiles and builds the jar for program with proper MANIFEST file mentioning main-class name), 
+		e) run-program-only.sh (runs the program from already existing jar with given inputs) and 
+		f) run-all.sh (Does both compile code, generates jar and runs the program with given inputs).
+		
+	3) Examples - how to execute above scripts.
+		a) generate-jar.sh (NOTE: you might need to add execute permission to make this script executable)
+		>> ./generate-jar.sh
+
+		b) run-program.sh
+		(NOTE: you might need to add execute permission to make this script executable)
+		(NOTE: While running programs V2, V3, V4 on hadoop, make sure your files are put in HDFS.)
+		>> ./run-program.sh input/purchases4.txt output
+
+		c) run.sh 
+		(NOTE: you might need to add execute permission to make this script executable)
+		(NOTE: While running programs V2, V3, V4 on hadoop, make sure your files are put in HDFS.)
+		>> ./run.sh input/purchases4.txt output 
+
+		d) If you want to run the generated jar all by yourself using hadoop command, you can do that using 
+		>> hadoop jar MedianPurchaseV2.jar input/purchases4.txt output
+		
+		or 
+		
+		>> java -jar MedianPurchaseV1.jar ../purchases4.txt output.txt
+		Or with JVM parameters like
+		>> java -Xms1400m -Xmx2000m -XX:ParallelGCThreads=4 -jar MedianPurchaseV1.jar ../purchases4.txt output.txt
+		
+Important Note:
+1) For V1 program, input file should be on local and not on HDFS (like for v2, v3, v4).
+2) For V2, V3, V4 - input file should be in HDFS (except when running in standalone mode).
+3) Make sure hadoop is properly installed and configured before you run any of above programs.
